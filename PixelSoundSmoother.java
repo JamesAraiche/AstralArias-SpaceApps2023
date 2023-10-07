@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class PixelSoundFinder {
+public class PixelSoundSmoother {
 
     static class Coord {
         int x, y;
@@ -14,19 +14,22 @@ public class PixelSoundFinder {
         public String toString() {
             return "(" + x + ", " + y + ")";
         }
-    }
 
-    private int[][] createRandomGrid(int rows, int cols) {
-        Random random = new Random();
-        int[][] grid = new int[rows][cols];
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                grid[i][j] = random.nextInt(50);
-            }
+        @Override
+        public int hashCode() {
+            return Objects.hash(x, y);
         }
 
-        return grid;
+        @Override
+        public boolean equals(Object obj) {
+            try {
+                Coord other = (Coord) obj;
+                return this.x == other.x && this.y == other.y;
+            } catch (Exception e) {
+                return false;
+            }
+        }
     }
 
 
@@ -65,7 +68,7 @@ public class PixelSoundFinder {
 
         int distance = 1;
 
-        while (distance < radius) {
+        while (distance <= radius) {
             for (int i = q.size(); i > 0; i--) {
                 Coord current = q.poll();
                 assert current != null;
@@ -82,8 +85,6 @@ public class PixelSoundFinder {
             distance++;
         }
 
-        System.out.println(distances);
-
         return(calculatePixelSound(g, distances));
     }
 
@@ -92,7 +93,6 @@ public class PixelSoundFinder {
         double pixelSound = 0;
 
         for (Coord coord : distances.keySet()) {
-            System.out.println("coord: " + coord + ", distance: " + distances.get(coord) + ", value: " + g[coord.x][coord.y]);
             pixelSound += g[coord.x][coord.y] * Math.pow(0.5, distances.get(coord));
         }
 
@@ -100,10 +100,18 @@ public class PixelSoundFinder {
     }
 
 
-    public static void main(String[] args) {
-        PixelSoundFinder psf = new PixelSoundFinder();
-        int[][] grid = psf.createRandomGrid(10, 10);
-        System.out.println(psf.findPixelSound(grid, 1, 1, 3));
+    public double[][] smoothGrid(int[][] g, int radius) {
+        int rows = g.length;
+        int cols = g[0].length;
+        double[][] newGrid = new double[rows][cols];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                newGrid[i][j] = findPixelSound(g, i, j, radius);
+            }
+        }
+
+        return newGrid;
     }
 }
 
