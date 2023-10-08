@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Random;
 
 public class Main {
@@ -17,19 +18,19 @@ public class Main {
 
 
     public static void main(String[] args) {
-        // extract sound from image
-        // store sounds in grid
+        // get sin data from database todo
+        SinData sinData = new SinData(1.0, 0.1);
+        SinData sinData2 = new SinData(2.0, 0.5);
+        Collection<SinData> sinDataCollection = Arrays.asList(sinData, sinData2);
+
+        SinFunctions2Audio sf2a = new SinFunctions2Audio();
+        sf2a.createLinearCombo(sinDataCollection);
+        // store sin waves in grid
         int[][] grid = createRandomGrid(10, 10);
         // smooth sounds
         PixelSoundSmoother pss = new PixelSoundSmoother();
         double[][] smoothGrid = pss.smoothGrid(grid, 3);
-        System.out.println(Arrays.deepToString(smoothGrid));
 
-        while (true) {
-            // get mouse position
-            // get sound at mouse position
-            // play sound
-            break;
-        }
+        // Use smoothened sin waves to create audio file
     }
 }
