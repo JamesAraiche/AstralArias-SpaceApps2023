@@ -1,10 +1,18 @@
 
 <template>
-    <button v-on="$attrs" @click="handleClick" :class="[dark ? 'dark' : 'light', 'baseButton']">{{buttonText}}</button>
+    <button v-on="$attrs" @mouseover="playAudio()" @mouseleave="stopAudio()" :class="['audiotest', 'baseButton']">{{buttonText}}</button>
 </template>
 
 <script>
+const sound = require("@/assets/Audio/audio.wav")
+var myTrack
+
 export default {
+    data: () => ({
+        sound,
+        myTrack
+    }),
+
     props:{
         buttonText:{
             type: String,
@@ -13,6 +21,20 @@ export default {
         dark:{
             type: Boolean,
             default: () => false,
+        },
+    },
+    methods: {
+        getAudio(){
+        return this.sound;
+        },
+        playAudio(){
+        myTrack = new Audio(this.sound)
+        myTrack.addEventListener("canplaythrough", () => {
+            myTrack.play();
+        })
+        },
+        stopAudio(){
+            myTrack.pause()
         },
     },
 };
@@ -24,16 +46,11 @@ export default {
     border: none;
     border-radius: 4px;
 }
-.light{
+.audiotest{
     background: white;
     color: black;
     border: 1px solid gray;
     cursor: pointer;
 }
 
-.dark{
-    background: black;
-    color: white;
-    cursor:pointer;
-}
 </style>
