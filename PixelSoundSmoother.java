@@ -33,7 +33,7 @@ public class PixelSoundSmoother {
     }
 
 
-    private Set<Coord> getNeighbours(int[][] g, Coord coord) {
+    private Set<Coord> getNeighbours(Collection<SinData>[][] g, Coord coord) {
         int rows = g.length;
         int cols = g[0].length;
         int x = coord.x;
@@ -58,7 +58,7 @@ public class PixelSoundSmoother {
     }
 
 
-    private double findPixelSound(int[][] g, int x, int y, int radius) {
+    private Collection<SinData> findPixelSound(Collection<SinData>[][] g, int x, int y, int radius) {
         Queue<Coord> q = new ArrayDeque<>();
         Map<Coord, Integer> distances = new HashMap<>();
 
@@ -89,21 +89,26 @@ public class PixelSoundSmoother {
     }
 
 
-    private double calculatePixelSound(int[][] g, Map<Coord, Integer> distances) {
-        double pixelSound = 0;
+    private Collection<SinData> calculatePixelSound(Collection<SinData>[][] g, Map<Coord, Integer> distances) {
+        Collection<SinData> newPixelFunction = new ArrayList<>();
 
         for (Coord coord : distances.keySet()) {
-            pixelSound += g[coord.x][coord.y] * Math.pow(0.5, distances.get(coord));
+            Collection<SinData> pixelFunction = g[coord.x][coord.y];
+            double amplitude = Math.pow(0.5, distances.get(coord));
+
+            for (SinData sinData : pixelFunction) {
+                newPixelFunction.add(new SinData(sinData.getAmplitude() * amplitude, sinData.getFrequency()));
+            }
         }
 
-        return pixelSound;
+        return newPixelFunction;
     }
 
 
-    public double[][] smoothGrid(int[][] g, int radius) {
+    public Collection<SinData>[][] smoothGrid(Collection<SinData>[][] g, int radius) {
         int rows = g.length;
         int cols = g[0].length;
-        double[][] newGrid = new double[rows][cols];
+        Collection<SinData>[][] newGrid = new Collection[rows][cols];
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {

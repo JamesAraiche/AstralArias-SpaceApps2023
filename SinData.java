@@ -14,4 +14,9 @@ public class SinData {
     public double getFrequency() {
         return frequency;
     }
+
+    @Override
+    public String toString() {
+        return ("(A: " + amplitude + ", f: " + frequency + ")");
+    }
 }
