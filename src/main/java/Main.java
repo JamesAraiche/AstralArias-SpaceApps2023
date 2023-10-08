@@ -21,7 +21,8 @@ public class Main {
 
 
     public static void main(String[] args) {
-        // get sin data from database todo
+        // get sin data from database
+        GoogleCloudIO.establishConnection();
         // store sin waves in grid
         Collection<SinData>[][] grid = createRandomGrid(10, 10);
         // smooth sounds
@@ -31,7 +32,6 @@ public class Main {
         System.out.println(Arrays.deepToString(grid));
         System.out.println(Arrays.deepToString(smoothGrid));
         // Use smoothened sin waves to create audio file
-
         System.out.println(smoothGrid[5][5]);
         Collection<SinData> sinDataCollection = smoothGrid[5][5];
         SinFunctions2Audio sf2a = new SinFunctions2Audio();
