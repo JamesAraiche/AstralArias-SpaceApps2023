@@ -24,7 +24,8 @@ public class Main {
         // get sin data from database
         GoogleCloudIO.establishConnection();
         // store sin waves in grid
-        Collection<SinData>[][] grid = createRandomGrid(10, 10);
+        Collection<SinData>[][] grid = GoogleCloudIO.fetchSinData(10, 10);
+        //Collection<SinData>[][] grid = createRandomGrid(10, 10);
         // smooth sounds
         PixelSoundSmoother pss = new PixelSoundSmoother();
         Collection<SinData>[][] smoothGrid = pss.smoothGrid(grid, 3);
@@ -33,8 +34,12 @@ public class Main {
         System.out.println(Arrays.deepToString(smoothGrid));
         // Use smoothened sin waves to create audio file
         System.out.println(smoothGrid[5][5]);
-        Collection<SinData> sinDataCollection = smoothGrid[5][5];
+
         SinFunctions2Audio sf2a = new SinFunctions2Audio();
-        sf2a.createLinearCombo(sinDataCollection);
+        sf2a.convertToAudioFiles(smoothGrid);
+
+        GoogleCloudIO.sendAudioFilesToDatabase(10, 10);
+
+        GoogleCloudIO.closeConnection();
     }
 }

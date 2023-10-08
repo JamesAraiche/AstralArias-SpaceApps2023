@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 public class SinFunctions2Audio {
-    public void createLinearCombo (Collection<SinData> sinData) {
+    public void convertToAudioFiles(Collection<SinData>[][] grid) {
         // create linear combination of sin waves
         int SAMPLE_RATE = 44100;
         double DURATION = 5.0;
@@ -17,35 +17,41 @@ public class SinFunctions2Audio {
 
         AudioFormat audioFormat = new AudioFormat(SAMPLE_RATE, 16, NUM_CHANNELS, true, true);
 
-        try {
-            ByteArrayOutputStream audioData = new ByteArrayOutputStream();
-            long numFrames = (long) (DURATION * SAMPLE_RATE);
-            int numBytes = (int) (numFrames * audioFormat.getFrameSize());
+        for (int i = 0; i < grid[0].length; i++) {
+            for (int j = 0; j < grid.length; j++) {
+                Collection<SinData> sinData = grid[i][i];
 
-            for(long frame = 0; frame < numFrames; frame++) {
-                double sample = 0.0;
-                double time = frame / (double) SAMPLE_RATE;
+                try {
+                    ByteArrayOutputStream audioData = new ByteArrayOutputStream();
+                    long numFrames = (long) (DURATION * SAMPLE_RATE);
+                    int numBytes = (int) (numFrames * audioFormat.getFrameSize());
 
-                for (SinData sd : sinData) {
-                    sample += sd.getAmplitude() * Math.sin(2 * Math.PI * sd.getFrequency() * time);
+                    for(long frame = 0; frame < numFrames; frame++) {
+                        double sample = 0.0;
+                        double time = frame / (double) SAMPLE_RATE;
+
+                        for (SinData sd : sinData) {
+                            sample += sd.getAmplitude() * Math.sin(2 * Math.PI * sd.getFrequency() * time);
+                        }
+
+                        // sample is in range [-1.0, 1.0], so this converts to range [-32767, 32767] for 16-bit audio
+                        audioData.write((int) (sample * Short.MAX_VALUE));
+                    }
+
+                    byte[] audioBytes = audioData.toByteArray();
+
+                    AudioInputStream audioInputStream = new AudioInputStream(
+                            new ByteArrayInputStream(audioBytes),
+                            audioFormat,
+                            audioBytes.length / audioFormat.getFrameSize()
+                    );
+
+                    File audioFile = new File("./audioFiles/audio" + i + j + ".wav");
+                    AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, audioFile);
+                } catch (IOException io) {
+                    System.out.println("Error writing to file");
                 }
-
-                // sample is in range [-1.0, 1.0], so this converts to range [-32767, 32767] for 16-bit audio
-                audioData.write((int) (sample * Short.MAX_VALUE));
             }
-
-            byte[] audioBytes = audioData.toByteArray();
-
-            AudioInputStream audioInputStream = new AudioInputStream(
-                    new ByteArrayInputStream(audioBytes),
-                    audioFormat,
-                    audioBytes.length / audioFormat.getFrameSize()
-            );
-
-            File audioFile = new File("audio.wav");
-            AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, audioFile);
-        } catch (IOException io) {
-            System.out.println("Error writing to file");
         }
     }
 }
