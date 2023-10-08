@@ -5,8 +5,8 @@
     </h1>
   </div>
   <div class="myDiv">
-    <span v-for="n in 1000">
-      <app-button buttonText="" />
+    <span v-for="n in 100" v-bind:key="n">
+      <app-button :aud_file="n" buttonText="e" />
     </span>
   </div>
 </template>
