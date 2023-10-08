@@ -3,30 +3,35 @@
     <h1>
       Cosmos PerSonified
     </h1>
-    <app-button @click="handleDark" :dark="true" buttonText="Dark" />
-    <app-button @click="handleLight" style="margin-top: 10px;" buttonText="Light" />
+  </div>
+  <div class="myDiv">
+    <span v-for="n in 1000">
+      <app-button buttonText="" />
+    </span>
   </div>
 </template>
 
 <script>
 import AppButton from "./components/MyButton.vue"
+
 export default {
   name: 'App',
+  data(){
+    return{
+      hover: false,
+    };
+  },
+
   components: {
     AppButton
   },
-  methods: {
-        handleDark(){
-            console.log("DARK");
-        },
-        handleLight(){
-            console.log("LIGHT");
-        }
-    }
 }
 </script>
 
-<style>
+<style scoped>
+.myDiv{
+  border: 5px outset red;
+}
 #app {
   display: flex;
   flex-direction: column;  
