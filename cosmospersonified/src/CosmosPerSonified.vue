@@ -6,7 +6,7 @@
   </div>
   <div class="myDiv">
     <span v-for="n in 100" v-bind:key="n">
-      <app-button :aud_file="n" buttonText="e" />
+      <app-button :aud_file="n-1" buttonText="e" />
     </span>
   </div>
 </template>

@@ -5,12 +5,10 @@
 
 <script>
 
-const sound = require("../assets/Audio/audioFiles/audio10.wav")
 var myTrack
 
 export default {
     data: () => ({
-        sound,
         myTrack
     }),
 
@@ -35,11 +33,16 @@ export default {
     //},
 
     methods: {
-        getAudio(){
-            return this.sound;
-        },
         playAudio(){
-            myTrack = new Audio(this.sound)
+            let fileEx = ""
+            if (this.aud_file < 10) {
+                fileEx = "0" + (this.aud_file)
+            } else {
+                fileEx = (this.aud_file)
+            }
+            const sound = require(`../assets/Audio/audioFiles/audio${fileEx}.wav`)
+
+            myTrack = new Audio(sound)
             myTrack.addEventListener("canplaythrough", () => {
                 myTrack.play();
             })
