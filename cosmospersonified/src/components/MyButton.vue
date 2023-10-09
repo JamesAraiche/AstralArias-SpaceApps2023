@@ -50,11 +50,15 @@ export default {
 
             myTrack = new Audio(sound)
             myTrack.addEventListener("canplaythrough", () => {
-                myTrack.play();
+                myTrack.play()
             })
         },
         stopAudio(){
-            myTrack.pause();
+            var isPlaying = myTrack.currentTime >= 0 && !myTrack.paused && !myTrack.ended
+                && myTrack.readyState > myTrack.HAVE_CURRENT_DATA
+            if(isPlaying){
+                myTrack.pause();
+            }
         },
     },
 };
