@@ -42,7 +42,7 @@ public class GoogleCloudIO {
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                grid[i][j] = new ArrayList<SinData>();
+                grid[i][j] = new ArrayList<>();
             }
         }
 
