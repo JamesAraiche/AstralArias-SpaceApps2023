@@ -12,6 +12,7 @@
 <script>
 
 var myTrack
+var playPromise
 
 export default {
     data: () => ({
@@ -50,15 +51,16 @@ export default {
 
             myTrack = new Audio(sound)
             myTrack.addEventListener("canplaythrough", () => {
-                myTrack.play()
+                playPromise = myTrack.play()
+                if(playPromise !== undefined){
+                    playPromise.then(__ => {`${__}`
+                })
+                .catch(error => {`${error}`});
+                }
             })
         },
         stopAudio(){
-            var isPlaying = myTrack.currentTime >= 0 && !myTrack.paused && !myTrack.ended
-                && myTrack.readyState > myTrack.HAVE_CURRENT_DATA
-            if(isPlaying){
-                myTrack.pause();
-            }
+            myTrack.pause()
         },
     },
 };
