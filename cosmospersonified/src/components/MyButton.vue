@@ -1,6 +1,12 @@
 
 <template>
-    <button v-on="$attrs" @mouseover="playAudio()" @mouseleave="stopAudio()" :class="['audiotest', 'baseButton']">{{buttonText}}</button>
+    <button v-on="$attrs"
+            @mouseover="playAudio()"
+            @mouseleave="stopAudio()"
+            :class="['audiotest', 'baseButton']"
+    >
+      {{buttonText}}
+    </button>
 </template>
 
 <script>
@@ -48,7 +54,7 @@ export default {
             })
         },
         stopAudio(){
-            myTrack.pause()
+            myTrack.pause();
         },
     },
 };
